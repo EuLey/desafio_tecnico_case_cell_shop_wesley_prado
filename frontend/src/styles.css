@@ -199,6 +199,10 @@ body {
   border-radius: var(--radius-sm);
   margin-bottom: 1.5rem;
   font-weight: 500;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
 }
 
 .feedback-error {
@@ -211,5 +215,69 @@ body {
   background: var(--color-success-bg);
   color: var(--color-success);
   border-left: 4px solid var(--color-success);
+}
+
+.feedback-close {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  color: inherit;
+  padding: 0 0.25rem;
+  font-family: inherit;
+}
+
+.feedback-close:hover {
+  opacity: 0.7;
+}
+
+/* ------------------------------ Dev toggle ------------------------------ */
+
+.dev-toggle {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  padding: 0.6rem 0.85rem;
+  background: rgba(124, 58, 237, 0.06);
+  border: 1px dashed rgba(124, 58, 237, 0.3);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  color: var(--color-text);
+  cursor: pointer;
+  user-select: none;
+}
+
+.dev-toggle input[type='checkbox'] {
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
+.dev-toggle-hint {
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+  font-style: italic;
+}
+
+/* ------------------------------ Spinner --------------------------------- */
+
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  vertical-align: -2px;
+  margin-right: 0.5rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
