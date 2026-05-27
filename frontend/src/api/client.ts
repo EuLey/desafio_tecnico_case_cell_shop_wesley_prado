@@ -10,3 +10,11 @@ export async function fetchProducts(): Promise<Product[]> {
   }
   return res.json()
 }
+
+// Endpoint dev-only que zera estoque, pedidos e cache de idempotência.
+export async function resetAll(): Promise<void> {
+  const res = await fetch(`${API_BASE}/admin/reset`, { method: 'POST' })
+  if (!res.ok) {
+    throw new Error('Falha ao resetar o estado.')
+  }
+}

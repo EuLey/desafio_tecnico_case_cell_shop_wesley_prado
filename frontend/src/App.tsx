@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { ProductCard } from './components/ProductCard'
 import { StatusBanner } from './components/StatusBanner'
-import { fetchProducts } from './api/client'
+import { fetchProducts, resetAll } from './api/client'
 import { useCheckout } from './hooks/useCheckout'
 import type { Product } from './types'
 
@@ -10,6 +10,7 @@ export function App() {
   const [productsLoading, setProductsLoading] = useState(true)
   const [productsError, setProductsError] = useState<string | null>(null)
   const [simulateFailure, setSimulateFailure] = useState(false)
+  const [resetting, setResetting] = useState(false)
   const { state, checkout, reset } = useCheckout()
 
   useEffect(() => {
@@ -33,6 +34,20 @@ export function App() {
     checkout(productId, { simulatePaymentFailure: simulateFailure })
   }
 
+  const handleReset = async () => {
+    setResetting(true)
+    try {
+      await resetAll()
+      const fresh = await fetchProducts()
+      setProducts(fresh)
+      reset()
+    } catch (err) {
+      console.error('Falha ao resetar:', err)
+    } finally {
+      setResetting(false)
+    }
+  }
+
   return (
     <div className="container">
       <header className="brand">
@@ -47,18 +62,29 @@ export function App() {
         )}
 
         {!productsLoading && !productsError && (
-          <label className="dev-toggle">
-            <input
-              type="checkbox"
-              checked={simulateFailure}
-              onChange={(e) => setSimulateFailure(e.target.checked)}
-              disabled={isCheckoutLoading}
-            />
-            <span>Simular pagamento recusado</span>
-            <span className="dev-toggle-hint">
-              (próximo clique em &quot;Comprar&quot; usará um cartão recusado)
-            </span>
-          </label>
+          <div className="dev-tools">
+            <label className="dev-toggle">
+              <input
+                type="checkbox"
+                checked={simulateFailure}
+                onChange={(e) => setSimulateFailure(e.target.checked)}
+                disabled={isCheckoutLoading || resetting}
+              />
+              <span>Simular pagamento recusado</span>
+              <span className="dev-toggle-hint">
+                (próximo clique em &quot;Comprar&quot; usará um cartão recusado)
+              </span>
+            </label>
+            <button
+              type="button"
+              className="btn-reset"
+              onClick={handleReset}
+              disabled={isCheckoutLoading || resetting}
+              title="Restaura estoque e limpa pedidos (uso de desenvolvimento)"
+            >
+              {resetting ? 'Resetando…' : '↻ Resetar estoque'}
+            </button>
+          </div>
         )}
 
         {state.status === 'success' && (
