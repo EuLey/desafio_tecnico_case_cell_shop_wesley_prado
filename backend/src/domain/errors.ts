@@ -22,6 +22,12 @@ export class ProductNotFoundError extends AppError {
   }
 }
 
+export class OrderNotFoundError extends AppError {
+  constructor(orderId: string) {
+    super(404, 'ORDER_NOT_FOUND', `Pedido "${orderId}" não encontrado.`, { orderId })
+  }
+}
+
 export class OutOfStockError extends AppError {
   constructor(productId: string, availableQty: number) {
     super(409, 'OUT_OF_STOCK', 'Estoque insuficiente para um ou mais itens.', { productId, availableQty })
