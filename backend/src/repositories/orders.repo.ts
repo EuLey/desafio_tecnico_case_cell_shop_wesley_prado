@@ -25,3 +25,8 @@ export function create(input: CreateOrderInput): Order {
 export function getById(orderId: string): Order | undefined {
   return orders.get(orderId)
 }
+
+// Apenas para uso em testes — limpa todos os pedidos.
+export function __resetForTesting(): void {
+  orders.clear()
+}
