@@ -1,5 +1,6 @@
 import express, { type Express, type Request, type Response } from 'express'
 import { productsRouter } from './routes/products.routes'
+import { errorHandler } from './middlewares/errorHandler'
 
 export function createApp(): Express {
   const app = express()
@@ -11,6 +12,9 @@ export function createApp(): Express {
   })
 
   app.use('/products', productsRouter)
+
+  // errorHandler precisa ser o ÚLTIMO middleware.
+  app.use(errorHandler)
 
   return app
 }
