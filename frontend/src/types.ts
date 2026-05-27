@@ -3,6 +3,7 @@ export type Product = {
   name: string
   price: number
   stock: number
+  imageUrl: string
 }
 
 export type OrderItem = {
