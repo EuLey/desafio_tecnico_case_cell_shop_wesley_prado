@@ -3,16 +3,17 @@ import * as ordersRepo from '../repositories/orders.repo'
 import * as paymentService from './payment.service'
 import type { CheckoutRequest } from '../schemas/checkout.schema'
 import type { Order, OrderItem } from '../domain/types'
+import { ProductNotFoundError, OutOfStockError } from '../domain/errors'
 
 export async function processCheckout(input: CheckoutRequest): Promise<Order> {
   let total = 0
   const lineItems: OrderItem[] = input.items.map((item) => {
     const product = productsRepo.getProduct(item.productId)
     if (!product) {
-      throw new Error(`Produto "${item.productId}" não encontrado`)
+      throw new ProductNotFoundError(item.productId)
     }
     if (product.stock < item.quantity) {
-      throw new Error(`Estoque insuficiente para "${item.productId}"`)
+      throw new OutOfStockError(item.productId, product.stock)
     }
     total += product.price * item.quantity
     return {
