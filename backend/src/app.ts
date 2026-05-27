@@ -1,4 +1,5 @@
 import express, { type Express, type Request, type Response } from 'express'
+import { productsRouter } from './routes/products.routes'
 
 export function createApp(): Express {
   const app = express()
@@ -8,6 +9,8 @@ export function createApp(): Express {
   app.get('/health', (_req: Request, res: Response) => {
     res.json({ ok: true })
   })
+
+  app.use('/products', productsRouter)
 
   return app
 }
